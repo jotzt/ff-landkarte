@@ -8,7 +8,7 @@ library("alphahull")
 library("igraph")
 
 # Wechsel in das Arbeitsverzeichnis, ggf. anpassen
-setwd("/Users/jost/Documents/Karten/WLAN")
+# setwd("~/Karten/WLAN")
 
 # Projektion für Geodaten
 P4S.latlon <- CRS("+proj=longlat +datum=WGS84 +no_defs")
@@ -191,13 +191,3 @@ gch.df.sp <- SpatialPolygonsDataFrame(gch.sp, data=rmeta)
 
 # writePolyShape(gch.co.df.sp, "gch-co")
 writePolyShape(gch.df.sp, "gch")
-
-
-# # KDE
-# library("MASS")
-# grenzen.d <- readShapePoly("gadm/DEU_adm/DEU_adm1.shp")
-# ff.pal <- colorRampPalette(c("white","blue","lightblue","green","yellow","red","black","white"))
-# ff.kde <- kde2d(x=router$long, y=router$lat, n=100, lims=c(5,15,47,55))
-# plot(grenzen.d)
-# filled.contour(ff.kde, nlevels=100, color.palette=ff.pal)
-# #write.csv(file="ff-kde.csv",ff.kde)
