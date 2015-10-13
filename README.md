@@ -17,6 +17,7 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
  
 - R Project starten und das Skript "FF-communities.R" ausführen. Z. B. mit 
   > setwd("Verzeichnis der data.json")
+
   > source("FF-communities.R")
 
 - Dadurch werden im Verzeichnis zwei Dateien erzeugt:
