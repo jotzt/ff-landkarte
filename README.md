@@ -17,7 +17,7 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
   $ wget -O data.json http://www.freifunk-karte.de/data.php
 ````
 
-- R Project starten und das Skript "FF-communities.R" ausführen. Z. B. mit 
+- R Project starten und das Skript "ff-landkarte.R" ausführen. Z. B. mit 
 ````
   > setwd("Verzeichnis der data.json") <br/>
   > source("ff-landkarte.R")
