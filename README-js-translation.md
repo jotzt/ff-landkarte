@@ -38,6 +38,8 @@ write the spatial objects to a shapefile
 ### DBSCAN
 https://en.wikipedia.org/wiki/DBSCAN
 
+https://github.com/upphiminn/jDBSCAN
+
 http://www.philippe-fournier-viger.com/spmf/
 
 ### Concave Hull
