@@ -15,9 +15,9 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
 - Download der Daten der Freifunkt-Karte: wget -O data.json http://www.freifunk-karte.de/data.php
  
 - R Project starten und das Skript "FF-communities.R" ausführen. Z. B. mit 
-  > setwd("Verzeichnis der data.json")
-  > source("FF-communities.R")
+  * setwd("Verzeichnis der data.json")
+  * source("FF-communities.R")
 
-Dadurch werden im Verzeichnis zwei Dateien erzeugt:
+- Dadurch werden im Verzeichnis zwei Dateien erzeugt:
   * router.csv    Alle Router aus der Freifunk-Karte mit Koordinaten
   * gch.shp       Shapefile mit den berechneten Bereichen der Metacommunities
