@@ -32,3 +32,23 @@ add a small buffer to the spatial object
 
 write the spatial objects to a shapefile 
 ````
+
+## Resources and js Libraries 
+
+### DBSCAN
+https://en.wikipedia.org/wiki/DBSCAN
+
+http://www.philippe-fournier-viger.com/spmf/
+
+### Concave Hull
+https://github.com/AndriiHeonia/hull
+
+### Manipulate Graphs
+https://github.com/tantalor/graphjs
+
+https://github.com/cpettitt/graphlib
+
+### Spatial Data
+https://github.com/turfjs/turf
+
+https://github.com/manuelbieh/Geolib
