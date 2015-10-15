@@ -26,4 +26,4 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
 
 - Dadurch werden im Verzeichnis zwei Dateien erzeugt:
   * router.csv   - Alle Router aus der Freifunk-Karte mit Koordinaten
-  * gch.shp      - Shapefile mit den berechneten Bereichen der Metacommunities
+  * gch.shp      - Shapefile mit den berechneten Bereichen der Metacommunities (zum Anzeigen kann z. B. https://mapshaper.org verwendet werden)
