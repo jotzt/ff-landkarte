@@ -1,7 +1,8 @@
 # Freifunk-Landkarte
 Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities einfach visualisieren. Siehe auch: https://forum.freifunk.net/t/freifunk-landkarte/5181
 
-- Download R Project: https://www.r-project.org/ Fertige Pakete sind in den meisten Linux-Distributionen enthalten
+- Download R Project: https://www.r-project.org/ Fertige Pakete sind in den meisten Linux-Distributionen enthalten:
+  - `apt-get install r-base` 
 - Die folgenden Pakete müssen in R installiert sein:
   * jsonlite
   * fpc
