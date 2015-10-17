@@ -3,7 +3,7 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
 
 - Download R Project: https://www.r-project.org/ Fertige Pakete sind in den meisten Linux-Distributionen enthalten:
   - `apt-get install r-base` 
-- Die folgenden Pakete müssen in R installiert sein:
+- Für R Project müssen noch einzelne Pakete installiert werden, siehe https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Installing-packages Für das Skript werden die folgenden benötigt:
   * jsonlite
   * fpc
   * sp
