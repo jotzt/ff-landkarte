@@ -1,8 +1,8 @@
 # Freifunk-Landkarte js-Version
 
-This file contains the pseudocode of the R Project script and a collection of possible libs which could be used for the implementation in js.
+This file contains the description of the R Project script and a collection of possible libraries which could be used for the implementation in js.
 
-## Pseudocode of existing R-Project script
+## Description of existing R-Project script
 
 ````
 read data from nodes.json file obtained via freifunk-karte.de/data.php
