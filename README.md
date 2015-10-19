@@ -8,7 +8,7 @@ Mit der ff-landkarte lässt sich die Verbreitung der Freifunk-(Meta-)Communities
   > chooseCRANmirror()
   > install.packages("pkg", dependencies=TRUE)
 ````
-- Die folgenden Pakete werde benötigt:
+- Die folgenden Pakete werden benötigt:
   * jsonlite
   * fpc
   * sp
