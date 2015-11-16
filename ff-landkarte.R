@@ -14,6 +14,7 @@ library("igraph")
 P4S.latlon <- CRS("+proj=longlat +datum=WGS84 +no_defs")
 P4S.psmerc <- CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs
 ")
+P4S.aeqd <- CRS("+proj=aeqd +lat_0=50 +lon_0=10 +x_0=0 +y_0=0")
 
 # JSON-Daten einlesen
 data.ffmap <- fromJSON("data.json", flatten=TRUE)
@@ -22,6 +23,7 @@ router <- transform(router, lat=as.numeric(lat), long=as.numeric(long), clients=
 
 # Namen der Communities einkürzen
 comms <- data.ffmap$communities
+
 for (i in names(comms)) {
 	comms[[i]]$name <- gsub("Freifunk ","",comms[[i]]$name)
 	comms[[i]]$name <- gsub("Freifunk","",comms[[i]]$name)
@@ -57,26 +59,25 @@ router <- router[router$lat<60,]
 # Router-Daten in CSV-Datei schreiben 
 write.csv(router, file="router.csv")
 
-# Clustering (Meta-Communities)
-router$pre <- 0
-for (i in unique(router$meta)) {
-	ds <- dbscan(
-		spTransform(SpatialPoints(router[router$meta==i,][,c("long","lat")], proj4string=P4S.latlon), P4S.psmerc)@coords,
-		eps=2.5e4, MinPts=4, showplot=0
-	) 
-	pre <- predict(ds, router[router$meta==i])
-	router[router$meta==i,]$pre <- pre
-}
-
-
 # Router-Koordinaten als Geodaten formatieren
-router.sp <- SpatialPointsDataFrame(router[c("long","lat")],data=as.data.frame(router[,c("name","status","clients","meta","community","comm.name","pre")]), proj4string=P4S.latlon)
+router.sp <- spTransform(SpatialPointsDataFrame(router[c("long","lat")],data=as.data.frame(router[,c("name","status","clients","meta","community","comm.name")]), proj4string=P4S.latlon), P4S.aeqd)
 
 # Koordinaten-Duplikate entfernen (für alphahull erforderlich)
 router.sp <- remove.duplicates(router.sp)
 
+# Clustering (Meta-Communities)
+router.sp@data$pre <- 0
+for (i in unique(router$meta)) {
+	ds <- dbscan(
+		router.sp[router.sp@data$meta==i,]@coords,
+		eps=1.5e4, MinPts=6, showplot=0
+	) 
+	pre <- predict(ds, router.sp@data[router.sp@data$meta==i])
+	router.sp@data[router.sp@data$meta==i,]$pre <- pre
+}
+
 # Liste der einzelnen Meta-Cluster
-rmeta <- unique(router[router$pre > 0,][c("meta","pre")])
+rmeta <- unique(router.sp@data[router.sp@data$pre > 0,][c("meta","pre")])
 gch.list <- list()
 
 # Konkave Hüllen um die Cluster berechnen (= Gebiete der Freifunk-Metacommunities)
@@ -84,7 +85,8 @@ for (i in 1:dim(rmeta)[1])  {
 	rdata <- router.sp[router.sp$meta==rmeta$meta[i],][router.sp[router.sp$meta==rmeta$meta[i],]$pre==rmeta$pre[i],]
 	if (dim(rdata)[1] > 3) {	
 		# calculate concave hull
-		gch.as <- ashape(jitter(rdata@coords, 1e-3), alpha=0.20) 
+		# gch.as <- ashape(jitter(rdata@coords, 1e-3), alpha=0.20) 
+		gch.as <- ashape(jitter(rdata@coords, 1), alpha=1.5e4) 
 		gch.c <- graph.edgelist(cbind(as.character(gch.as$edges[, "ind1"]), as.character(gch.as$edges[,"ind2"])), directed = FALSE)
 		# modify the graph to obtain one single circular graph
 		while (sum(degree(gch.c)==1) > 0) {
@@ -96,7 +98,7 @@ for (i in 1:dim(rmeta)[1])  {
 		if (sum(degree(gch.c) > 2) > 1) {
 			gch.c <- delete.vertices(gch.c, names(degree(gch.c) > 2)[(degree(gch.c) > 2)][1])
 		}
-	    if (!is.connected(gch.c)) gch.c <- decompose.graph(gch.c, mode="weak", max.comps=1, min.vertices=4)[[1]]
+	    if (!is.connected(gch.c)) gch.c <- decompose.graph(gch.c, mode="weak", max.comps=1, min.vertices=3)[[1]]
 	    # delete one edge to open the circular graph	
 		if (sum(degree(gch.c)==1) == 0) gch.g <- gch.c - E(gch.c)[1] else gch.g <- gch.c
 	    # find chain end points
@@ -108,15 +110,15 @@ for (i in 1:dim(rmeta)[1])  {
         gch.path <- c(gch.path, gch.path[1])
 	    gch.c <- gch.as$x[gch.path,]
 	
-	    gch <- gBuffer(SpatialPolygons(list(Polygons(list(Polygon(gch.c)), ID="1")),proj4string=P4S.latlon),width=0.03)
+	    gch <- gBuffer(SpatialPolygons(list(Polygons(list(Polygon(gch.c)), ID="1")),proj4string=P4S.aeqd),width=2000)
 	    gch@polygons[[1]]@ID <- rownames(rmeta)[i]
 	} 
 	else {
-		gch <- gBuffer(rdata, width=0.03)
+		gch <- gBuffer(rdata, width=2000)
 		gch@polygons[[1]]@ID <- rownames(rmeta)[i]
 	} 
 	
-	gch.list[i] <- gch@polygons[[1]]
+	gch.list[i] <- spTransform(gch, P4S.latlon)@polygons[[1]]
 }
 
 gch.sp <- SpatialPolygons(gch.list, proj4string=P4S.latlon)
